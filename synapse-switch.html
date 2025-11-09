@@ -347,10 +347,45 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* Enhanced instruction text */
+        .instruction-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+        }
+
+        .blue-text {
+            color: #3498db;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
+        }
+
+        .red-text {
+            color: #e74c3c;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+        }
+
+        .highlight-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #ffffff;
+        }
+
         .overlay .warning-text {
-            margin-top: 20px;
-            font-size: 14px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: 700;
             color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            letter-spacing: 1px;
         }
 
         #final-score {
@@ -376,6 +411,29 @@
             transition: transform 0.2s;
         }
 
+        /* Enhanced main button */
+        .main-button {
+            font-family: 'Orbitron', monospace;
+            padding: 18px 50px;
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3498db, #e74c3c);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5),
+                        0 0 40px rgba(231, 76, 60, 0.3);
+        }
+
+        .main-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.8),
+                        0 0 60px rgba(231, 76, 60, 0.6);
+        }
+
         .overlay button:hover {
             transform: scale(1.1);
         }
@@ -383,12 +441,14 @@
         .secondary-button {
             padding: 10px 30px;
             font-size: 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 5px;
             color: white;
             cursor: pointer;
-            font-weight: bold;
+            letter-spacing: 1px;
             transition: all 0.2s;
             margin-top: 10px;
         }
@@ -549,11 +609,11 @@
 
         <div class="overlay" id="start-overlay">
             <h2 class="game-title">SYNAPSE SWITCH</h2>
-            <p>🔵 Blue Orb: Press 'A' to switch lanes</p>
-            <p>🔴 Red Orb: Press '→' (Arrow Right) to switch lanes</p>
-            <p>Match the shapes shown in the rules!</p>
+            <p class="instruction-text"><span class="blue-text">🔵 Blue Orb:</span> Press 'A' to switch lanes</p>
+            <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press '→' (Arrow Right) to switch lanes</p>
+            <p class="highlight-text">Match the shapes shown in the rules!</p>
             <p class="warning-text">⚡ Rules switch every 30 seconds!</p>
-            <button onclick="startGame()">START GAME</button>
+            <button onclick="startGame()" class="main-button">START GAME</button>
             <button id="instructions-button" class="secondary-button">How to Play</button>
         </div>
 
