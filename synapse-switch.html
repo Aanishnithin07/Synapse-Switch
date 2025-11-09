@@ -459,6 +459,55 @@
             transform: scale(1.05);
         }
 
+        /* Difficulty selector */
+        .difficulty-selector {
+            margin: 30px 0 20px 0;
+        }
+
+        .difficulty-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .difficulty-btn {
+            font-family: 'Rajdhani', sans-serif;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #3498db, #e74c3c);
+            border: 2px solid #fff;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.6),
+                        0 0 30px rgba(231, 76, 60, 0.4);
+            transform: scale(1.05);
+        }
+
         /* Instructions modal */
         #instructions-modal {
             position: absolute;
@@ -613,6 +662,16 @@
             <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press '→' (Arrow Right) to switch lanes</p>
             <p class="highlight-text">Match the shapes shown in the rules!</p>
             <p class="warning-text">⚡ Rules switch every 30 seconds!</p>
+            
+            <div class="difficulty-selector">
+                <div class="difficulty-label">SELECT DIFFICULTY:</div>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                    <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+            
             <button onclick="startGame()" class="main-button">START GAME</button>
             <button id="instructions-button" class="secondary-button">How to Play</button>
         </div>
@@ -663,6 +722,13 @@
     </div>
 
     <script>
+        // Difficulty settings
+        const DIFFICULTY_SETTINGS = {
+            easy: { spawnRate: 1500, fallSpeed: 2500 },
+            medium: { spawnRate: 1100, fallSpeed: 2000 },
+            hard: { spawnRate: 800, fallSpeed: 1500 }
+        };
+
         // State variables for lane positions
         let blueLane = 'left';
         let redLane = 'left';
@@ -676,6 +742,7 @@
             level: 1,
             spawnRate: 1500,      // Starting time in ms between spawns
             fallSpeed: 2500,      // Starting animation duration in ms
+            difficulty: 'easy',   // Default difficulty
             rules: {
                 blue: 'TRIANGLE',  // Blue orb should collect TRIANGLE
                 red: 'SQUARE'      // Red orb should collect SQUARE
@@ -939,6 +1006,11 @@
         function gameLoop(timestamp) {
             if (!gameActive || gameState.isGameOver) return;
             
+            // Initialize lastSwitchTime on first frame
+            if (lastSwitchTime === 0) {
+                lastSwitchTime = timestamp;
+            }
+            
             // Check for collisions
             checkCollisions();
             
@@ -948,7 +1020,7 @@
                 lastSpawnTime = timestamp;
             }
             
-            // Switch rules every 15 seconds
+            // Switch rules every 30 seconds (only while playing)
             if (timestamp - lastSwitchTime > switchInterval) {
                 switchRules();
                 lastSwitchTime = timestamp;
@@ -963,13 +1035,16 @@
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('game-over-overlay').style.display = 'none';
             
+            // Get base settings from selected difficulty
+            const baseSettings = DIFFICULTY_SETTINGS[gameState.difficulty];
+            
             // Reset game state
             gameActive = true;
             gameState.isGameOver = false;
             gameState.score = 0;
             gameState.level = 1;
-            gameState.spawnRate = 1500;   // Reset to initial spawn rate
-            gameState.fallSpeed = 2500;   // Reset to initial fall speed
+            gameState.spawnRate = baseSettings.spawnRate;   // Set based on difficulty
+            gameState.fallSpeed = baseSettings.fallSpeed;   // Set based on difficulty
             lastSpawnTime = 0;
             lastSwitchTime = 0;
             
@@ -1014,6 +1089,20 @@
         document.getElementById('back-to-menu').addEventListener('click', () => {
             document.getElementById('game-over-overlay').style.display = 'none';
             document.getElementById('start-overlay').style.display = 'flex';
+        });
+
+        // Difficulty selector handlers
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', (event) => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                event.target.classList.add('active');
+                
+                // Update game state difficulty
+                gameState.difficulty = event.target.dataset.difficulty;
+            });
         });
 
         // Show start overlay on load
