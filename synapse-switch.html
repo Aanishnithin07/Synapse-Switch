@@ -1059,6 +1059,8 @@
         let hitZoneBottom = 550; // Will be calculated dynamically
         let lastSwitchTime = 0;
         const switchInterval = 30000; // 30 seconds
+        let gameStartTime = 0; // Track when game started for time-based difficulty
+        let timeBasedSpawnReduction = 0; // Additional spawn rate reduction over time
 
         // Function to calculate hit zone based on container height
         function updateHitZone() {
@@ -1160,6 +1162,18 @@
                 // Decrease fall speed (faster falling) - minimum 800ms
                 gameState.fallSpeed = Math.max(800, gameState.fallSpeed - 120);
             }
+        }
+
+        // Function to gradually increase challenge over time (separate from score-based difficulty)
+        function updateTimeBasedDifficulty(currentTime) {
+            // Calculate how many minutes have passed
+            const elapsedTime = currentTime - gameStartTime;
+            const minutesPassed = Math.floor(elapsedTime / 60000); // 60000ms = 1 minute
+            
+            // Gradually reduce spawn rate over time (more obstacles)
+            // Every minute, reduce spawn rate by 50ms (very gentle increase)
+            // Maximum reduction of 400ms over 8 minutes
+            timeBasedSpawnReduction = Math.min(400, minutesPassed * 50);
         }
 
         // Function to increase score
@@ -1362,16 +1376,23 @@
                 return;
             }
             
-            // Initialize lastSwitchTime on first frame
+            // Initialize timing on first frame
             if (lastSwitchTime === 0) {
                 lastSwitchTime = timestamp;
+                gameStartTime = timestamp; // Track game start time
             }
+            
+            // Update time-based difficulty (gradual spawn rate increase)
+            updateTimeBasedDifficulty(timestamp);
             
             // Check for collisions
             checkCollisions();
             
-            // Spawn obstacles based on current spawn rate
-            if (timestamp - lastSpawnTime > gameState.spawnRate) {
+            // Calculate effective spawn rate (base rate - score reduction - time reduction)
+            const effectiveSpawnRate = Math.max(400, gameState.spawnRate - timeBasedSpawnReduction);
+            
+            // Spawn obstacles based on effective spawn rate
+            if (timestamp - lastSpawnTime > effectiveSpawnRate) {
                 spawnObstacle();
                 lastSpawnTime = timestamp;
             }
@@ -1419,6 +1440,8 @@
             // Reset timing variables
             lastSpawnTime = 0;
             lastSwitchTime = 0;
+            gameStartTime = 0;
+            timeBasedSpawnReduction = 0;
             
             // Reset rules to initial state (IMPORTANT: always start with same rules)
             gameState.rules.blue = 'TRIANGLE';
