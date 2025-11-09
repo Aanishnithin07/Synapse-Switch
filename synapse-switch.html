@@ -324,6 +324,23 @@
             margin-bottom: 20px;
         }
 
+        /* Special styling for SYNAPSE SWITCH title */
+        .game-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(52, 152, 219, 1),
+                0 0 20px rgba(52, 152, 219, 0.8),
+                0 0 30px rgba(231, 76, 60, 0.6),
+                0 0 40px rgba(231, 76, 60, 0.4),
+                2px 2px 0px rgba(52, 152, 219, 0.8),
+                -2px -2px 0px rgba(231, 76, 60, 0.8);
+            letter-spacing: 6px;
+        }
+
         .overlay p {
             font-size: 18px;
             margin-bottom: 30px;
@@ -531,7 +548,7 @@
         </div>
 
         <div class="overlay" id="start-overlay">
-            <h2>SYNAPSE SWITCH</h2>
+            <h2 class="game-title">SYNAPSE SWITCH</h2>
             <p>🔵 Blue Orb: Press 'A' to switch lanes</p>
             <p>🔴 Red Orb: Press '→' (Arrow Right) to switch lanes</p>
             <p>Match the shapes shown in the rules!</p>
