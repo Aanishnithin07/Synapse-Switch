@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Synapse Switch</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -44,18 +46,64 @@
 
         .score-section {
             text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            min-width: 150px;
         }
 
         .score-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            font-family: 'Rajdhani', sans-serif;
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 5px;
+            letter-spacing: 2px;
+            font-weight: 600;
         }
 
         #score-display, #high-score-display {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 42px;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
             color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
+                         0 0 40px rgba(52, 152, 219, 0.6);
+            line-height: 1;
+        }
+
+        #high-score-display {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 
+                         0 0 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .new-high-score-message {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            z-index: 250;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                top: -50px;
+                opacity: 0;
+            }
+            to {
+                top: 100px;
+                opacity: 1;
+            }
         }
 
         .rule-section {
@@ -487,7 +535,7 @@
             <p>🔵 Blue Orb: Press 'A' to switch lanes</p>
             <p>🔴 Red Orb: Press '→' (Arrow Right) to switch lanes</p>
             <p>Match the shapes shown in the rules!</p>
-            <p class="warning-text">⚡ Rules switch every 15 seconds!</p>
+            <p class="warning-text">⚡ Rules switch every 30 seconds!</p>
             <button onclick="startGame()">START GAME</button>
             <button id="instructions-button" class="secondary-button">How to Play</button>
         </div>
@@ -516,7 +564,7 @@
                 <li>You <strong>MUST</strong> avoid every shape that does NOT match your rule.</li>
                 <li>Missing a correct shape or hitting an incorrect shape is <strong class="text-red">GAME OVER</strong>.</li>
                 <li>Every 5 points, the game speeds up!</li>
-                <li>Every 15 seconds, the rules will <strong class="text-gold">SWITCH!</strong> Pay attention!</li>
+                <li>Every 30 seconds, the rules will <strong class="text-gold">SWITCH!</strong> Pay attention!</li>
             </ul>
             
             <h2>Controls</h2>
@@ -531,6 +579,10 @@
         </div>
 
         <div id="switch-warning">SWITCH!</div>
+
+        <div class="new-high-score-message" id="new-high-score-banner">
+            🏆 NEW HIGH SCORE!! BE READY TO BEAT IT! 🏆
+        </div>
     </div>
 
     <script>
@@ -564,7 +616,7 @@
         const hitZoneTop = 500; // Adjusted for 600px height - orb is at bottom
         const hitZoneBottom = 550;
         let lastSwitchTime = 0;
-        const switchInterval = 15000; // 15 seconds
+        const switchInterval = 30000; // 30 seconds
 
         // Function to update blue orb position
         function updateBlueOrb() {
@@ -651,6 +703,13 @@
                 document.getElementById('high-score-display').textContent = gameState.highScore;
                 // Save to localStorage
                 localStorage.setItem('synapseHighScore', gameState.highScore);
+                
+                // Show motivational banner for new high score
+                const banner = document.getElementById('new-high-score-banner');
+                banner.style.display = 'block';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                }, 3000); // Show for 3 seconds
             }
         }
 
