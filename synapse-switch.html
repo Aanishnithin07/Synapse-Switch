@@ -21,6 +21,9 @@
             align-items: center;
             min-height: 100vh;
             color: white;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         #game-container {
@@ -31,6 +34,23 @@
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             position: relative;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            #game-container {
+                width: 100vw;
+                height: 100dvh;
+                height: 100vh;
+                border-radius: 0;
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
 
         #ui-header {
@@ -44,12 +64,26 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
         }
 
+        @media (max-width: 768px) {
+            #ui-header {
+                height: clamp(60px, 12vh, 80px);
+                padding: 5px 10px;
+            }
+        }
+
         .score-section {
             text-align: center;
             padding: 10px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .score-section {
+                padding: 5px;
+                min-width: clamp(80px, 25vw, 150px);
+            }
         }
 
         .score-label {
@@ -61,6 +95,13 @@
             font-weight: 600;
         }
 
+        @media (max-width: 768px) {
+            .score-label {
+                font-size: clamp(8px, 2vw, 11px);
+                letter-spacing: 1px;
+            }
+        }
+
         #score-display, #high-score-display {
             font-size: 42px;
             font-weight: 900;
@@ -69,6 +110,12 @@
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
                          0 0 40px rgba(52, 152, 219, 0.6);
             line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            #score-display, #high-score-display {
+                font-size: clamp(24px, 8vw, 42px);
+            }
         }
 
         #high-score-display {
@@ -95,6 +142,16 @@
             animation: slideDown 0.5s ease-out;
         }
 
+        @media (max-width: 768px) {
+            .new-high-score-message {
+                top: clamp(60px, 12vh, 100px);
+                padding: clamp(10px, 2.5vw, 15px) clamp(20px, 5vw, 30px);
+                font-size: clamp(12px, 3vw, 18px);
+                width: 90%;
+                text-align: center;
+            }
+        }
+
         @keyframes slideDown {
             from {
                 top: -50px;
@@ -118,6 +175,14 @@
             font-weight: bold;
             min-width: 100px;
             text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            #blue-rule-display, #red-rule-display {
+                padding: 5px 10px;
+                font-size: clamp(10px, 2.5vw, 14px);
+                min-width: clamp(60px, 20vw, 100px);
+            }
         }
 
         #blue-rule-display {
@@ -188,6 +253,16 @@
             bottom: 20px;
             transition: transform 0.2s ease;
             box-shadow: 0 0 20px currentColor;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .orb {
+                width: clamp(25px, 8vw, 35px);
+                height: clamp(25px, 8vw, 35px);
+                bottom: clamp(20px, 4vh, 30px);
+                box-shadow: 0 0 clamp(15px, 3vw, 25px) currentColor;
+            }
         }
 
         #blue-orb {
@@ -217,12 +292,29 @@
             transform: translateX(calc(-50% + 100px)) !important;
         }
 
+        @media (max-width: 768px) {
+            .lane-left {
+                transform: translateX(calc(-50% - 15vw)) !important;
+            }
+
+            .lane-right {
+                transform: translateX(calc(-50% + 15vw)) !important;
+            }
+        }
+
         /* Obstacle styling */
         .obstacle {
             position: absolute;
             width: 30px;
             height: 30px;
             top: -50px;
+        }
+
+        @media (max-width: 768px) {
+            .obstacle {
+                width: clamp(25px, 8vw, 35px);
+                height: clamp(25px, 8vw, 35px);
+            }
         }
 
         /* Triangle obstacles */
@@ -232,6 +324,14 @@
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
             border-bottom: 30px solid;
+        }
+
+        @media (max-width: 768px) {
+            .triangle {
+                border-left: clamp(12.5px, 4vw, 17.5px) solid transparent;
+                border-right: clamp(12.5px, 4vw, 17.5px) solid transparent;
+                border-bottom: clamp(25px, 8vw, 35px) solid;
+            }
         }
 
         .triangle.blue-obstacle {
@@ -248,6 +348,13 @@
         .square {
             width: 30px;
             height: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .square {
+                width: clamp(25px, 8vw, 35px);
+                height: clamp(25px, 8vw, 35px);
+            }
         }
 
         .square.blue-obstacle {
@@ -275,6 +382,24 @@
 
         .red-right-lane {
             left: calc(66% - 15px);
+        }
+
+        @media (max-width: 768px) {
+            .blue-left-lane {
+                left: calc(33% - 3vw);
+            }
+
+            .blue-right-lane {
+                left: calc(66% - 3vw);
+            }
+
+            .red-left-lane {
+                left: calc(33% - 3vw);
+            }
+
+            .red-right-lane {
+                left: calc(66% - 3vw);
+            }
         }
 
         /* Animations */
@@ -324,6 +449,13 @@
             margin-bottom: 20px;
         }
 
+        @media (max-width: 768px) {
+            .overlay h2 {
+                font-size: clamp(32px, 8vw, 48px);
+                margin-bottom: 15px;
+            }
+        }
+
         /* Special styling for SYNAPSE SWITCH title */
         .game-title {
             font-family: 'Orbitron', monospace;
@@ -341,10 +473,26 @@
             letter-spacing: 6px;
         }
 
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: clamp(28px, 8vw, 56px);
+                letter-spacing: clamp(2px, 1vw, 6px);
+                margin-bottom: 20px;
+            }
+        }
+
         .overlay p {
             font-size: 18px;
             margin-bottom: 30px;
             color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .overlay p {
+                font-size: clamp(14px, 3.5vw, 18px);
+                margin-bottom: 15px;
+                padding: 0 10px;
+            }
         }
 
         /* Enhanced instruction text */
@@ -356,6 +504,13 @@
             color: #ffffff;
             letter-spacing: 0.5px;
             line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .instruction-text {
+                font-size: clamp(14px, 3.5vw, 20px);
+                margin-bottom: 10px;
+            }
         }
 
         .blue-text {
@@ -378,6 +533,13 @@
             color: #ffffff;
         }
 
+        @media (max-width: 768px) {
+            .highlight-text {
+                font-size: clamp(16px, 4vw, 22px);
+                margin: 15px 0;
+            }
+        }
+
         .overlay .warning-text {
             font-family: 'Rajdhani', sans-serif;
             margin-top: 25px;
@@ -388,15 +550,39 @@
             letter-spacing: 1px;
         }
 
+        @media (max-width: 768px) {
+            .overlay .warning-text {
+                font-size: clamp(14px, 3.5vw, 18px);
+                margin-top: 15px;
+            }
+        }
+
         #final-score {
             font-size: 32px;
             margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            #final-score {
+                font-size: clamp(24px, 6vw, 32px);
+            }
         }
 
         #high-score-message {
             color: #ffd700;
             font-size: 16px;
             margin-bottom: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            #high-score-message {
+                font-size: clamp(14px, 3.5vw, 18px);
+            }
         }
 
         .overlay button {
@@ -428,6 +614,14 @@
                         0 0 40px rgba(231, 76, 60, 0.3);
         }
 
+        @media (max-width: 768px) {
+            .main-button {
+                padding: clamp(12px, 3vw, 18px) clamp(30px, 8vw, 50px);
+                font-size: clamp(18px, 4.5vw, 24px);
+                letter-spacing: 1px;
+            }
+        }
+
         .main-button:hover {
             transform: scale(1.1);
             box-shadow: 0 0 30px rgba(52, 152, 219, 0.8),
@@ -451,6 +645,13 @@
             letter-spacing: 1px;
             transition: all 0.2s;
             margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .secondary-button {
+                padding: clamp(8px, 2vw, 10px) clamp(20px, 6vw, 30px);
+                font-size: clamp(14px, 3.5vw, 16px);
+            }
         }
 
         .secondary-button:hover {
@@ -493,6 +694,13 @@
             transition: all 0.3s;
         }
 
+        @media (max-width: 768px) {
+            .difficulty-btn {
+                padding: clamp(8px, 2vw, 12px) clamp(15px, 4vw, 25px);
+                font-size: clamp(12px, 3vw, 16px);
+            }
+        }
+
         .difficulty-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.4);
@@ -525,11 +733,24 @@
             padding: 20px;
         }
 
+        @media (max-width: 768px) {
+            #instructions-modal {
+                padding: 15px;
+            }
+        }
+
         #instructions-modal h1 {
             font-size: 42px;
             margin-bottom: 30px;
             color: #fff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            #instructions-modal h1 {
+                font-size: clamp(24px, 6vw, 42px);
+                margin-bottom: 20px;
+            }
         }
 
         #instructions-modal h2 {
@@ -540,6 +761,14 @@
             text-align: left;
             width: 100%;
             max-width: 600px;
+        }
+
+        @media (max-width: 768px) {
+            #instructions-modal h2 {
+                font-size: clamp(18px, 4.5vw, 24px);
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
         }
 
         #instructions-modal ul {
@@ -559,12 +788,28 @@
             line-height: 1.6;
         }
 
+        @media (max-width: 768px) {
+            #instructions-modal li {
+                padding: 8px 12px;
+                margin: 6px 0;
+                font-size: clamp(13px, 3.2vw, 16px);
+                line-height: 1.5;
+            }
+        }
+
         #instructions-modal .creator-credit {
             margin-top: 40px;
             font-size: 18px;
             font-style: italic;
             color: #ffd700;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            #instructions-modal .creator-credit {
+                margin-top: 25px;
+                font-size: clamp(14px, 3.5vw, 18px);
+            }
         }
 
         #instructions-modal .controls-section {
@@ -578,6 +823,14 @@
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #e74c3c;
             font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            #instructions-modal .controls-section p {
+                padding: 10px 12px;
+                margin: 6px 0;
+                font-size: clamp(13px, 3.2vw, 16px);
+            }
         }
 
         .text-blue {
@@ -603,14 +856,34 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 72px;
-            font-weight: bold;
+            font-size: 84px;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
             color: #fff;
-            text-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 60px #fff;
+            text-shadow: 
+                0 0 30px #fff,
+                0 0 60px #fff,
+                0 0 90px rgba(255, 215, 0, 0.8),
+                0 0 120px rgba(255, 215, 0, 0.6),
+                4px 4px 0px rgba(231, 76, 60, 0.8),
+                -4px -4px 0px rgba(52, 152, 219, 0.8);
             z-index: 200;
             display: none;
-            animation: flash 0.5s ease-in-out 2;
+            animation: flash 0.5s ease-in-out 3;
             pointer-events: none;
+            letter-spacing: 8px;
+            padding: 30px 60px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 4px solid #ffd700;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 768px) {
+            #switch-warning {
+                font-size: clamp(48px, 15vw, 84px);
+                letter-spacing: clamp(3px, 1.5vw, 8px);
+                padding: clamp(20px, 4vw, 30px) clamp(30px, 8vw, 60px);
+            }
         }
 
         @keyframes flash {
@@ -618,10 +891,34 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
             }
-            50% {
+            25% {
                 opacity: 0.3;
-                transform: translate(-50%, -50%) scale(1.2);
+                transform: translate(-50%, -50%) scale(1.15);
             }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            75% {
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+        }
+
+        /* Touch control visual feedback */
+        #left-pane, #right-pane {
+            -webkit-tap-highlight-color: rgba(52, 152, 219, 0.3);
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        #left-pane:active {
+            background: linear-gradient(180deg, #2a4d7f 0%, #1a2b3a 100%);
+        }
+
+        #right-pane:active {
+            background: linear-gradient(180deg, #7f2a2a 0%, #3a1a1a 100%);
         }
     </style>
 </head>
@@ -733,6 +1030,7 @@
         let blueLane = 'left';
         let redLane = 'left';
         let gameActive = false;
+        let animationFrameId = null; // Track animation frame for proper cleanup
 
         // Game state object
         const gameState = {
@@ -757,10 +1055,22 @@
 
         // Timing variables
         let lastSpawnTime = 0;
-        const hitZoneTop = 500; // Adjusted for 600px height - orb is at bottom
-        const hitZoneBottom = 550;
+        let hitZoneTop = 500; // Will be calculated dynamically
+        let hitZoneBottom = 550; // Will be calculated dynamically
         let lastSwitchTime = 0;
         const switchInterval = 30000; // 30 seconds
+
+        // Function to calculate hit zone based on container height
+        function updateHitZone() {
+            const gameContainer = document.getElementById('game-container');
+            const containerHeight = gameContainer.offsetHeight;
+            const headerHeight = document.getElementById('ui-header').offsetHeight;
+            const gameAreaHeight = containerHeight - headerHeight;
+            
+            // Hit zone is near the bottom where orbs are (last 15% of game area)
+            hitZoneTop = headerHeight + gameAreaHeight * 0.85;
+            hitZoneBottom = headerHeight + gameAreaHeight * 0.92;
+        }
 
         // Function to update blue orb position
         function updateBlueOrb() {
@@ -791,6 +1101,25 @@
                 redLane = (redLane === 'left') ? 'right' : 'left';
                 updateRedOrb();
             }
+        });
+
+        // Touch controls for mobile
+        leftPane.addEventListener('touchstart', (event) => {
+            if (!gameActive) return;
+            event.preventDefault(); // Prevent scrolling/zooming
+            
+            // Toggle blue orb lane (same as 'a' key)
+            blueLane = (blueLane === 'left') ? 'right' : 'left';
+            updateBlueOrb();
+        });
+
+        rightPane.addEventListener('touchstart', (event) => {
+            if (!gameActive) return;
+            event.preventDefault(); // Prevent scrolling/zooming
+            
+            // Toggle red orb lane (same as ArrowRight key)
+            redLane = (redLane === 'left') ? 'right' : 'left';
+            updateRedOrb();
         });
 
         // Function to update rule displays
@@ -859,15 +1188,29 @@
 
         // Function to handle game over
         function gameOver() {
-            // Immediately set game over state
+            // CRITICAL: Set game over state FIRST to prevent any further game logic
             gameState.isGameOver = true;
             gameActive = false;
             
+            // Stop the animation loop immediately
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
             // Immediately remove all obstacles from the DOM
-            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            document.querySelectorAll('.obstacle').forEach(obs => {
+                obs.remove();
+            });
+            
+            // Hide any visible switch warning
+            document.getElementById('switch-warning').style.display = 'none';
+            
+            // Hide new high score banner if showing
+            document.getElementById('new-high-score-banner').style.display = 'none';
             
             // Update final score display
-            document.getElementById('final-score').textContent = `Score: ${gameState.score}`;
+            document.getElementById('final-score').textContent = `Final Score: ${gameState.score}`;
             
             // Check and update high score
             const highScoreMessage = document.getElementById('high-score-message');
@@ -877,10 +1220,17 @@
                 // Save to localStorage
                 localStorage.setItem('synapseHighScore', gameState.highScore);
                 highScoreMessage.textContent = '🎉 NEW HIGH SCORE! 🎉';
+                highScoreMessage.style.color = '#ffd700';
+                highScoreMessage.style.fontSize = '20px';
+                highScoreMessage.style.fontWeight = 'bold';
             } else if (gameState.score === gameState.highScore && gameState.score > 0) {
                 highScoreMessage.textContent = '🏆 Tied High Score! 🏆';
+                highScoreMessage.style.color = '#ffd700';
+                highScoreMessage.style.fontSize = '18px';
             } else {
                 highScoreMessage.textContent = `High Score: ${gameState.highScore}`;
+                highScoreMessage.style.color = '#ffffff';
+                highScoreMessage.style.fontSize = '18px';
             }
             
             // Show game over overlay
@@ -889,6 +1239,9 @@
 
         // Function to check collisions
         function checkCollisions() {
+            // Don't check collisions if game is over
+            if (gameState.isGameOver || !gameActive) return;
+            
             const obstacles = document.querySelectorAll('.obstacle');
             const gameContainer = document.getElementById('game-container');
             const containerRect = gameContainer.getBoundingClientRect();
@@ -974,8 +1327,8 @@
             
             // Remove obstacle when animation ends
             obstacle.addEventListener('animationend', () => {
-                // Don't run logic if game is already over
-                if (gameState.isGameOver) {
+                // Don't run logic if game is already over or not active
+                if (gameState.isGameOver || !gameActive) {
                     obstacle.remove();
                     return;
                 }
@@ -1004,7 +1357,10 @@
 
         // Main game loop
         function gameLoop(timestamp) {
-            if (!gameActive || gameState.isGameOver) return;
+            if (!gameActive || gameState.isGameOver) {
+                animationFrameId = null;
+                return;
+            }
             
             // Initialize lastSwitchTime on first frame
             if (lastSwitchTime === 0) {
@@ -1027,53 +1383,73 @@
             }
             
             // Continue the game loop
-            requestAnimationFrame(gameLoop);
+            animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         function startGame() {
-            // Hide overlays
+            // Cancel any existing animation frame first
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
+            // Hide all overlays
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('game-over-overlay').style.display = 'none';
+            document.getElementById('instructions-modal').style.display = 'none';
+            
+            // Hide switch warning and high score banner
+            document.getElementById('switch-warning').style.display = 'none';
+            document.getElementById('new-high-score-banner').style.display = 'none';
+            
+            // Update hit zone for current screen size
+            updateHitZone();
             
             // Get base settings from selected difficulty
             const baseSettings = DIFFICULTY_SETTINGS[gameState.difficulty];
             
-            // Reset game state
+            // BULLETPROOF RESET: Reset ALL game state variables
             gameActive = true;
             gameState.isGameOver = false;
             gameState.score = 0;
             gameState.level = 1;
             gameState.spawnRate = baseSettings.spawnRate;   // Set based on difficulty
             gameState.fallSpeed = baseSettings.fallSpeed;   // Set based on difficulty
+            
+            // Reset timing variables
             lastSpawnTime = 0;
             lastSwitchTime = 0;
             
-            // Reset rules to initial state
+            // Reset rules to initial state (IMPORTANT: always start with same rules)
             gameState.rules.blue = 'TRIANGLE';
             gameState.rules.red = 'SQUARE';
             
-            // Reset orbs to left lane
+            // Reset orb positions to left lane
             blueLane = 'left';
             redLane = 'left';
             updateBlueOrb();
             updateRedOrb();
             
-            // Update displays
-            document.getElementById('score-display').textContent = gameState.score;
+            // Update all displays
+            document.getElementById('score-display').textContent = '0';
             updateRuleDisplays();
             
-            // Clear any existing obstacles
-            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            // Clear ALL existing obstacles from the DOM (bulletproof cleanup)
+            const allObstacles = document.querySelectorAll('.obstacle');
+            allObstacles.forEach(obs => {
+                obs.remove();
+            });
             
-            // Hide switch warning if visible
-            document.getElementById('switch-warning').style.display = 'none';
+            // Additional safety: clear obstacles from both panes
+            leftPane.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            rightPane.querySelectorAll('.obstacle').forEach(obs => obs.remove());
             
             // Start the game loop
-            requestAnimationFrame(gameLoop);
+            animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         function restartGame() {
-            // Simply call startGame to reset everything
+            // Bulletproof restart: use startGame which handles ALL cleanup
             startGame();
         }
 
@@ -1087,6 +1463,24 @@
         });
 
         document.getElementById('back-to-menu').addEventListener('click', () => {
+            // Ensure game is fully stopped
+            gameActive = false;
+            gameState.isGameOver = true;
+            
+            // Cancel animation frame
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
+            // Clear all obstacles
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            
+            // Hide warnings and banners
+            document.getElementById('switch-warning').style.display = 'none';
+            document.getElementById('new-high-score-banner').style.display = 'none';
+            
+            // Show start overlay and hide game over
             document.getElementById('game-over-overlay').style.display = 'none';
             document.getElementById('start-overlay').style.display = 'flex';
         });
@@ -1115,6 +1509,12 @@
             
             // Initialize rule displays
             updateRuleDisplays();
+            
+            // Initialize hit zone
+            updateHitZone();
+            
+            // Update hit zone on window resize
+            window.addEventListener('resize', updateHitZone);
             
             // Load high score from localStorage
             const savedHighScore = localStorage.getItem('synapseHighScore');
