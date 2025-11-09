@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synapse Switch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        #game-container {
+            width: 800px;
+            height: 600px;
+            background: #0f0f1e;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #ui-header {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .score-section {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+
+        #score-display, #high-score-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .rule-section {
+            display: flex;
+            gap: 20px;
+        }
+
+        #blue-rule-display, #red-rule-display {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        #blue-rule-display {
+            background: rgba(52, 152, 219, 0.3);
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+
+        #red-rule-display {
+            background: rgba(231, 76, 60, 0.3);
+            border: 2px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        #game-area {
+            width: 100%;
+            height: calc(100% - 80px);
+            display: flex;
+        }
+
+        #left-pane, #right-pane {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #left-pane {
+            background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #right-pane {
+            background: linear-gradient(180deg, #5f1e1e 0%, #2a0d0d 100%);
+        }
+
+        /* Lane indicators - visual guides */
+        .lane-indicator {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            top: 0;
+        }
+
+        #left-pane .lane-indicator:nth-child(1) {
+            left: 33%;
+        }
+
+        #left-pane .lane-indicator:nth-child(2) {
+            left: 66%;
+        }
+
+        #right-pane .lane-indicator:nth-child(1) {
+            left: 33%;
+        }
+
+        #right-pane .lane-indicator:nth-child(2) {
+            left: 66%;
+        }
+
+        /* Orb styling */
+        .orb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 20px;
+            transition: transform 0.2s ease;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        #blue-orb {
+            background: radial-gradient(circle at 30% 30%, #5dade2, #2874a6);
+            color: #3498db;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #red-orb {
+            background: radial-gradient(circle at 30% 30%, #ec7063, #a93226);
+            color: #e74c3c;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Lane positioning classes */
+        .lane-left {
+            transform: translateX(calc(-50% - 100px)) !important;
+        }
+
+        .lane-center {
+            transform: translateX(-50%) !important;
+        }
+
+        .lane-right {
+            transform: translateX(calc(-50% + 100px)) !important;
+        }
+
+        /* Obstacle styling */
+        .obstacle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: -50px;
+        }
+
+        /* Triangle obstacles */
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid;
+        }
+
+        .triangle.blue-obstacle {
+            border-bottom-color: #3498db;
+            filter: drop-shadow(0 0 10px #3498db);
+        }
+
+        .triangle.red-obstacle {
+            border-bottom-color: #e74c3c;
+            filter: drop-shadow(0 0 10px #e74c3c);
+        }
+
+        /* Square obstacles */
+        .square {
+            width: 30px;
+            height: 30px;
+        }
+
+        .square.blue-obstacle {
+            background: #3498db;
+            box-shadow: 0 0 15px #3498db;
+        }
+
+        .square.red-obstacle {
+            background: #e74c3c;
+            box-shadow: 0 0 15px #e74c3c;
+        }
+
+        /* Lane positioning for obstacles */
+        .blue-left-lane {
+            left: calc(33% - 15px);
+        }
+
+        .blue-right-lane {
+            left: calc(66% - 15px);
+        }
+
+        .red-left-lane {
+            left: calc(33% - 15px);
+        }
+
+        .red-right-lane {
+            left: calc(66% - 15px);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .orb:hover {
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes fall {
+            from {
+                top: -50px;
+            }
+            to {
+                top: 100%;
+            }
+        }
+
+        .obstacle {
+            animation: fall linear;
+        }
+
+        /* Game over / Start screen overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .overlay h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .overlay p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .overlay .warning-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ffd700;
+        }
+
+        #final-score {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        #high-score-message {
+            color: #ffd700;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .overlay button {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #3498db, #e74c3c);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .overlay button:hover {
+            transform: scale(1.1);
+        }
+
+        .secondary-button {
+            padding: 10px 30px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Instructions modal */
+        #instructions-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 150;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        #instructions-modal h1 {
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #instructions-modal h2 {
+            font-size: 24px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #3498db;
+            text-align: left;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #instructions-modal ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #instructions-modal li {
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #3498db;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        #instructions-modal .creator-credit {
+            margin-top: 40px;
+            font-size: 18px;
+            font-style: italic;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        #instructions-modal .controls-section {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #instructions-modal .controls-section p {
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #e74c3c;
+            font-size: 16px;
+        }
+
+        .text-blue {
+            color: #3498db;
+        }
+
+        .text-red {
+            color: #e74c3c;
+        }
+
+        .text-gold {
+            color: #ffd700;
+        }
+
+        #close-instructions {
+            margin-top: 20px;
+            padding: 12px 40px;
+        }
+
+        /* Switch warning */
+        #switch-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 60px #fff;
+            z-index: 200;
+            display: none;
+            animation: flash 0.5s ease-in-out 2;
+            pointer-events: none;
+        }
+
+        @keyframes flash {
+            0%, 100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="ui-header">
+            <div class="score-section">
+                <div class="score-label">SCORE</div>
+                <span id="score-display">0</span>
+            </div>
+            <div class="rule-section">
+                <div id="blue-rule-display">SAME</div>
+                <div id="red-rule-display">DIFF</div>
+            </div>
+            <div class="score-section">
+                <div class="score-label">HIGH SCORE</div>
+                <span id="high-score-display">0</span>
+            </div>
+        </div>
+
+        <div id="game-area">
+            <div id="left-pane">
+                <div class="lane-indicator"></div>
+                <div class="lane-indicator"></div>
+                <div id="blue-orb" class="orb lane-center"></div>
+            </div>
+
+            <div id="right-pane">
+                <div class="lane-indicator"></div>
+                <div class="lane-indicator"></div>
+                <div id="red-orb" class="orb lane-center"></div>
+            </div>
+        </div>
+
+        <div class="overlay" id="start-overlay">
+            <h2>SYNAPSE SWITCH</h2>
+            <p>🔵 Blue Orb: Press 'A' to switch lanes</p>
+            <p>🔴 Red Orb: Press '→' (Arrow Right) to switch lanes</p>
+            <p>Match the shapes shown in the rules!</p>
+            <p class="warning-text">⚡ Rules switch every 15 seconds!</p>
+            <button onclick="startGame()">START GAME</button>
+            <button id="instructions-button" class="secondary-button">How to Play</button>
+        </div>
+
+        <div class="overlay" id="game-over-overlay">
+            <h2>GAME OVER</h2>
+            <p id="final-score">Score: 0</p>
+            <p id="high-score-message"></p>
+            <button onclick="restartGame()">PLAY AGAIN</button>
+            <button id="back-to-menu" class="secondary-button">Main Menu</button>
+        </div>
+
+        <div id="instructions-modal">
+            <h1>How to Play</h1>
+            
+            <h2>The Motive</h2>
+            <ul>
+                <li>Synapse Switch is a brain-training game. Your goal is to fight your brain's instincts by managing two conflicting tasks at once.</li>
+            </ul>
+            
+            <h2>The Rules</h2>
+            <ul>
+                <li>You control two orbs: <strong class="text-blue">Blue (left)</strong> and <strong class="text-red">Red (right)</strong>.</li>
+                <li>A rule is displayed for each orb (e.g., "Blue: TRIANGLE").</li>
+                <li>You <strong>MUST</strong> hit every shape that matches your rule.</li>
+                <li>You <strong>MUST</strong> avoid every shape that does NOT match your rule.</li>
+                <li>Missing a correct shape or hitting an incorrect shape is <strong class="text-red">GAME OVER</strong>.</li>
+                <li>Every 5 points, the game speeds up!</li>
+                <li>Every 15 seconds, the rules will <strong class="text-gold">SWITCH!</strong> Pay attention!</li>
+            </ul>
+            
+            <h2>Controls</h2>
+            <div class="controls-section">
+                <p><strong>Laptop:</strong> "A" key (Blue Orb) and "Right Arrow" key (Red Orb)</p>
+                <p><strong>Mobile:</strong> Tap the Left side (Blue Orb) and Right side (Red Orb)</p>
+            </div>
+            
+            <p class="creator-credit">Created by AANISH NITHIN A</p>
+            
+            <button id="close-instructions" class="secondary-button">Close</button>
+        </div>
+
+        <div id="switch-warning">SWITCH!</div>
+    </div>
+
+    <script>
+        // State variables for lane positions
+        let blueLane = 'left';
+        let redLane = 'left';
+        let gameActive = false;
+
+        // Game state object
+        const gameState = {
+            score: 0,
+            highScore: 0,
+            isGameOver: false,
+            level: 1,
+            spawnRate: 1500,      // Starting time in ms between spawns
+            fallSpeed: 2500,      // Starting animation duration in ms
+            rules: {
+                blue: 'TRIANGLE',  // Blue orb should collect TRIANGLE
+                red: 'SQUARE'      // Red orb should collect SQUARE
+            }
+        };
+
+        // Get orb elements
+        const blueOrb = document.getElementById('blue-orb');
+        const redOrb = document.getElementById('red-orb');
+        const leftPane = document.getElementById('left-pane');
+        const rightPane = document.getElementById('right-pane');
+
+        // Timing variables
+        let lastSpawnTime = 0;
+        const hitZoneTop = 500; // Adjusted for 600px height - orb is at bottom
+        const hitZoneBottom = 550;
+        let lastSwitchTime = 0;
+        const switchInterval = 15000; // 15 seconds
+
+        // Function to update blue orb position
+        function updateBlueOrb() {
+            blueOrb.classList.remove('lane-left', 'lane-center', 'lane-right');
+            blueOrb.classList.add(`lane-${blueLane}`);
+        }
+
+        // Function to update red orb position
+        function updateRedOrb() {
+            redOrb.classList.remove('lane-left', 'lane-center', 'lane-right');
+            redOrb.classList.add(`lane-${redLane}`);
+        }
+
+        // Keydown event listener
+        document.addEventListener('keydown', (event) => {
+            if (!gameActive) return;
+
+            // Handle 'a' key for blue orb
+            if (event.key === 'a' || event.key === 'A') {
+                // Toggle between left and right
+                blueLane = (blueLane === 'left') ? 'right' : 'left';
+                updateBlueOrb();
+            }
+
+            // Handle 'ArrowRight' key for red orb
+            if (event.key === 'ArrowRight') {
+                // Toggle between left and right
+                redLane = (redLane === 'left') ? 'right' : 'left';
+                updateRedOrb();
+            }
+        });
+
+        // Function to update rule displays
+        function updateRuleDisplays() {
+            document.getElementById('blue-rule-display').textContent = gameState.rules.blue;
+            document.getElementById('red-rule-display').textContent = gameState.rules.red;
+        }
+
+        // Function to switch rules (the synapse switch!)
+        function switchRules() {
+            // Invert the rules
+            const tempBlue = gameState.rules.blue;
+            gameState.rules.blue = gameState.rules.red;
+            gameState.rules.red = tempBlue;
+            
+            // Update the displays
+            updateRuleDisplays();
+            
+            // Show the SWITCH! warning
+            const switchWarning = document.getElementById('switch-warning');
+            switchWarning.style.display = 'block';
+            
+            // Hide the warning after 1 second
+            setTimeout(() => {
+                switchWarning.style.display = 'none';
+            }, 1000);
+        }
+
+        // Function to update difficulty
+        function updateDifficulty() {
+            // Increase difficulty every 5 points
+            if (gameState.score % 5 === 0 && gameState.score > 0) {
+                gameState.level++;
+                
+                // Decrease spawn rate (faster spawning) - minimum 500ms
+                gameState.spawnRate = Math.max(500, gameState.spawnRate - 100);
+                
+                // Decrease fall speed (faster falling) - minimum 800ms
+                gameState.fallSpeed = Math.max(800, gameState.fallSpeed - 120);
+            }
+        }
+
+        // Function to increase score
+        function scorePoint() {
+            gameState.score++;
+            document.getElementById('score-display').textContent = gameState.score;
+            
+            // Update difficulty based on score
+            updateDifficulty();
+            
+            // Update high score if needed
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+                document.getElementById('high-score-display').textContent = gameState.highScore;
+                // Save to localStorage
+                localStorage.setItem('synapseHighScore', gameState.highScore);
+            }
+        }
+
+        // Function to handle game over
+        function gameOver() {
+            // Immediately set game over state
+            gameState.isGameOver = true;
+            gameActive = false;
+            
+            // Immediately remove all obstacles from the DOM
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            
+            // Update final score display
+            document.getElementById('final-score').textContent = `Score: ${gameState.score}`;
+            
+            // Check and update high score
+            const highScoreMessage = document.getElementById('high-score-message');
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+                document.getElementById('high-score-display').textContent = gameState.highScore;
+                // Save to localStorage
+                localStorage.setItem('synapseHighScore', gameState.highScore);
+                highScoreMessage.textContent = '🎉 NEW HIGH SCORE! 🎉';
+            } else if (gameState.score === gameState.highScore && gameState.score > 0) {
+                highScoreMessage.textContent = '🏆 Tied High Score! 🏆';
+            } else {
+                highScoreMessage.textContent = `High Score: ${gameState.highScore}`;
+            }
+            
+            // Show game over overlay
+            document.getElementById('game-over-overlay').style.display = 'flex';
+        }
+
+        // Function to check collisions
+        function checkCollisions() {
+            const obstacles = document.querySelectorAll('.obstacle');
+            const gameContainer = document.getElementById('game-container');
+            const containerRect = gameContainer.getBoundingClientRect();
+            
+            obstacles.forEach(obstacle => {
+                const rect = obstacle.getBoundingClientRect();
+                const relativeTop = rect.top - containerRect.top;
+                
+                // Check if obstacle is in hit zone
+                if (relativeTop >= hitZoneTop && relativeTop <= hitZoneBottom) {
+                    const obstacleType = obstacle.dataset.type;
+                    const obstacleLane = obstacle.dataset.lane; // 'left' or 'right'
+                    const obstacleColor = obstacle.dataset.color; // 'blue' or 'red'
+                    
+                    let collision = false;
+                    let correctType = false;
+                    
+                    // Check blue pane collisions
+                    if (obstacleColor === 'blue' && obstacleLane === blueLane) {
+                        collision = true;
+                        correctType = (obstacleType === gameState.rules.blue);
+                    }
+                    
+                    // Check red pane collisions
+                    if (obstacleColor === 'red' && obstacleLane === redLane) {
+                        collision = true;
+                        correctType = (obstacleType === gameState.rules.red);
+                    }
+                    
+                    // Handle collision
+                    if (collision) {
+                        obstacle.remove();
+                        
+                        if (correctType) {
+                            scorePoint();
+                        } else {
+                            gameOver();
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to spawn obstacles
+        function spawnObstacle() {
+            // Randomly choose spawn point
+            const spawnPoints = ['blue-left', 'blue-right', 'red-left', 'red-right'];
+            const spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
+            
+            // Randomly choose obstacle type
+            const obstacleTypes = ['TRIANGLE', 'SQUARE'];
+            const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            
+            // Create obstacle element
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            
+            // Add type class
+            if (obstacleType === 'TRIANGLE') {
+                obstacle.classList.add('triangle');
+            } else {
+                obstacle.classList.add('square');
+            }
+            
+            // Add spawn point class and color
+            if (spawnPoint.startsWith('blue')) {
+                obstacle.classList.add('blue-obstacle');
+                obstacle.classList.add(`${spawnPoint}-lane`);
+                leftPane.appendChild(obstacle);
+            } else {
+                obstacle.classList.add('red-obstacle');
+                obstacle.classList.add(`${spawnPoint}-lane`);
+                rightPane.appendChild(obstacle);
+            }
+            
+            // Store obstacle data
+            obstacle.dataset.type = obstacleType;
+            obstacle.dataset.lane = spawnPoint.split('-')[1]; // 'left' or 'right'
+            obstacle.dataset.color = spawnPoint.split('-')[0]; // 'blue' or 'red'
+            
+            // Set dynamic animation speed based on current difficulty
+            obstacle.style.animationDuration = gameState.fallSpeed + 'ms';
+            
+            // Remove obstacle when animation ends
+            obstacle.addEventListener('animationend', () => {
+                // Don't run logic if game is already over
+                if (gameState.isGameOver) {
+                    obstacle.remove();
+                    return;
+                }
+                
+                // Check if this was a correct obstacle that was missed
+                const obstacleType = obstacle.dataset.type;
+                const obstacleColor = obstacle.dataset.color;
+                
+                // If the obstacle type matches the rule for its pane, player should have collected it
+                if (obstacleColor === 'blue' && obstacleType === gameState.rules.blue) {
+                    // Missed a correct blue obstacle - Game Over
+                    gameOver();
+                    return;
+                }
+                
+                if (obstacleColor === 'red' && obstacleType === gameState.rules.red) {
+                    // Missed a correct red obstacle - Game Over
+                    gameOver();
+                    return;
+                }
+                
+                // If it wasn't a correct obstacle, just remove it
+                obstacle.remove();
+            });
+        }
+
+        // Main game loop
+        function gameLoop(timestamp) {
+            if (!gameActive || gameState.isGameOver) return;
+            
+            // Check for collisions
+            checkCollisions();
+            
+            // Spawn obstacles based on current spawn rate
+            if (timestamp - lastSpawnTime > gameState.spawnRate) {
+                spawnObstacle();
+                lastSpawnTime = timestamp;
+            }
+            
+            // Switch rules every 15 seconds
+            if (timestamp - lastSwitchTime > switchInterval) {
+                switchRules();
+                lastSwitchTime = timestamp;
+            }
+            
+            // Continue the game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            // Hide overlays
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('game-over-overlay').style.display = 'none';
+            
+            // Reset game state
+            gameActive = true;
+            gameState.isGameOver = false;
+            gameState.score = 0;
+            gameState.level = 1;
+            gameState.spawnRate = 1500;   // Reset to initial spawn rate
+            gameState.fallSpeed = 2500;   // Reset to initial fall speed
+            lastSpawnTime = 0;
+            lastSwitchTime = 0;
+            
+            // Reset rules to initial state
+            gameState.rules.blue = 'TRIANGLE';
+            gameState.rules.red = 'SQUARE';
+            
+            // Reset orbs to left lane
+            blueLane = 'left';
+            redLane = 'left';
+            updateBlueOrb();
+            updateRedOrb();
+            
+            // Update displays
+            document.getElementById('score-display').textContent = gameState.score;
+            updateRuleDisplays();
+            
+            // Clear any existing obstacles
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            
+            // Hide switch warning if visible
+            document.getElementById('switch-warning').style.display = 'none';
+            
+            // Start the game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        function restartGame() {
+            // Simply call startGame to reset everything
+            startGame();
+        }
+
+        // Instructions modal handlers
+        document.getElementById('instructions-button').addEventListener('click', () => {
+            document.getElementById('instructions-modal').style.display = 'flex';
+        });
+
+        document.getElementById('close-instructions').addEventListener('click', () => {
+            document.getElementById('instructions-modal').style.display = 'none';
+        });
+
+        document.getElementById('back-to-menu').addEventListener('click', () => {
+            document.getElementById('game-over-overlay').style.display = 'none';
+            document.getElementById('start-overlay').style.display = 'flex';
+        });
+
+        // Show start overlay on load
+        window.onload = function() {
+            document.getElementById('start-overlay').style.display = 'flex';
+            
+            // Initialize orb positions
+            updateBlueOrb();
+            updateRedOrb();
+            
+            // Initialize rule displays
+            updateRuleDisplays();
+            
+            // Load high score from localStorage
+            const savedHighScore = localStorage.getItem('synapseHighScore');
+            if (savedHighScore) {
+                gameState.highScore = parseInt(savedHighScore);
+                document.getElementById('high-score-display').textContent = gameState.highScore;
+            }
+        };
+    </script>
+</body>
+</html>
