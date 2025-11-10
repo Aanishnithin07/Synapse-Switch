@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "synapse-switch",
+  "builds": [
+    {
+      "src": "synapse-switch.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/synapse-switch.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

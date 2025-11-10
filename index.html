@@ -264,10 +264,19 @@
 
         @media (max-width: 768px) {
             .orb {
-                width: clamp(25px, 8vw, 35px);
-                height: clamp(25px, 8vw, 35px);
-                bottom: clamp(20px, 4vh, 30px);
-                box-shadow: 0 0 clamp(15px, 3vw, 25px) currentColor;
+                width: 50px;
+                height: 50px;
+                bottom: 40px;
+                box-shadow: 0 0 30px currentColor, 0 0 50px currentColor;
+                border: 3px solid rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .orb {
+                width: 45px;
+                height: 45px;
+                bottom: 35px;
             }
         }
 
@@ -300,11 +309,21 @@
 
         @media (max-width: 768px) {
             .lane-left {
-                transform: translateX(calc(-50% - 15vw)) !important;
+                transform: translateX(calc(-50% - 80px)) !important;
             }
 
             .lane-right {
-                transform: translateX(calc(-50% + 15vw)) !important;
+                transform: translateX(calc(-50% + 80px)) !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lane-left {
+                transform: translateX(calc(-50% - 60px)) !important;
+            }
+
+            .lane-right {
+                transform: translateX(calc(-50% + 60px)) !important;
             }
         }
 
@@ -318,8 +337,15 @@
 
         @media (max-width: 768px) {
             .obstacle {
-                width: clamp(25px, 8vw, 35px);
-                height: clamp(25px, 8vw, 35px);
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .obstacle {
+                width: 45px;
+                height: 45px;
             }
         }
 
@@ -334,9 +360,17 @@
 
         @media (max-width: 768px) {
             .triangle {
-                border-left: clamp(12.5px, 4vw, 17.5px) solid transparent;
-                border-right: clamp(12.5px, 4vw, 17.5px) solid transparent;
-                border-bottom: clamp(25px, 8vw, 35px) solid;
+                border-left: 25px solid transparent;
+                border-right: 25px solid transparent;
+                border-bottom: 50px solid;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .triangle {
+                border-left: 22.5px solid transparent;
+                border-right: 22.5px solid transparent;
+                border-bottom: 45px solid;
             }
         }
 
