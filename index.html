@@ -267,7 +267,7 @@
             .orb {
                 width: 50px;
                 height: 50px;
-                bottom: 100px;
+                bottom: 150px;
                 box-shadow: 0 0 30px currentColor, 0 0 50px currentColor;
                 border: 3px solid rgba(255, 255, 255, 0.8);
             }
@@ -277,7 +277,7 @@
             .orb {
                 width: 45px;
                 height: 45px;
-                bottom: 120px;
+                bottom: 180px;
             }
         }
 
@@ -1110,13 +1110,13 @@
             const headerHeight = document.getElementById('ui-header').offsetHeight;
             const gameAreaHeight = containerHeight - headerHeight;
             
-            // On mobile, orbs are higher (bottom: 100-120px), so adjust hit zone accordingly
+            // On mobile, orbs are higher (bottom: 150-180px), so adjust hit zone accordingly
             const isMobile = window.innerWidth <= 768;
             
             if (isMobile) {
-                // Mobile: orbs are at bottom 100-120px, hit zone should be higher
-                hitZoneTop = headerHeight + gameAreaHeight * 0.70;
-                hitZoneBottom = headerHeight + gameAreaHeight * 0.82;
+                // Mobile: orbs are at bottom 150-180px, hit zone should be much higher
+                hitZoneTop = headerHeight + gameAreaHeight * 0.55;
+                hitZoneBottom = headerHeight + gameAreaHeight * 0.72;
             } else {
                 // Desktop: orbs at bottom 20px, normal hit zone
                 hitZoneTop = headerHeight + gameAreaHeight * 0.85;
