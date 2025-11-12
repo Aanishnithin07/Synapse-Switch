@@ -140,6 +140,7 @@ This game was conceptualized, designed, and developed by **AANISH NITHIN A**.
 ## 📜 License
 
 This project is open source and available for educational purposes.
+ENJOY THE GAME !
 
 ---
 
