@@ -26,6 +26,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            min-height: 100dvh;
             color: white;
             margin: 0;
             padding: 0;
@@ -264,10 +265,19 @@
 
         @media (max-width: 768px) {
             .orb {
-                width: clamp(25px, 8vw, 35px);
-                height: clamp(25px, 8vw, 35px);
-                bottom: clamp(20px, 4vh, 30px);
-                box-shadow: 0 0 clamp(15px, 3vw, 25px) currentColor;
+                width: 50px;
+                height: 50px;
+                bottom: 45vh;
+                box-shadow: 0 0 30px currentColor, 0 0 50px currentColor;
+                border: 3px solid rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .orb {
+                width: 45px;
+                height: 45px;
+                bottom: 45vh;
             }
         }
 
@@ -300,11 +310,21 @@
 
         @media (max-width: 768px) {
             .lane-left {
-                transform: translateX(calc(-50% - 15vw)) !important;
+                transform: translateX(calc(-50% - 80px)) !important;
             }
 
             .lane-right {
-                transform: translateX(calc(-50% + 15vw)) !important;
+                transform: translateX(calc(-50% + 80px)) !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lane-left {
+                transform: translateX(calc(-50% - 60px)) !important;
+            }
+
+            .lane-right {
+                transform: translateX(calc(-50% + 60px)) !important;
             }
         }
 
@@ -318,8 +338,15 @@
 
         @media (max-width: 768px) {
             .obstacle {
-                width: clamp(25px, 8vw, 35px);
-                height: clamp(25px, 8vw, 35px);
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .obstacle {
+                width: 45px;
+                height: 45px;
             }
         }
 
@@ -334,9 +361,17 @@
 
         @media (max-width: 768px) {
             .triangle {
-                border-left: clamp(12.5px, 4vw, 17.5px) solid transparent;
-                border-right: clamp(12.5px, 4vw, 17.5px) solid transparent;
-                border-bottom: clamp(25px, 8vw, 35px) solid;
+                border-left: 25px solid transparent;
+                border-right: 25px solid transparent;
+                border-bottom: 50px solid;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .triangle {
+                border-left: 22.5px solid transparent;
+                border-right: 22.5px solid transparent;
+                border-bottom: 45px solid;
             }
         }
 
@@ -962,9 +997,10 @@
         <div class="overlay" id="start-overlay">
             <h2 class="game-title">SYNAPSE SWITCH</h2>
             <p class="instruction-text"><span class="blue-text">🔵 Blue Orb:</span> Press 'A' to switch lanes</p>
-            <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press '→' (Arrow Right) to switch lanes</p>
+            <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press 'D' to switch lanes</p>
             <p class="highlight-text">Match the shapes shown in the rules!</p>
-            <p class="warning-text">⚡ Rules switch every 30 seconds!</p>
+            <p class="warning-text">⚡ Shapes switch every 30 seconds!</p>
+            <p class="instruction-text" style="font-size: 14px; margin-top: 10px;">💡 Press SPACE for fullscreen | ESC to exit</p>
             
             <div class="difficulty-selector">
                 <div class="difficulty-label">SELECT DIFFICULTY:</div>
@@ -990,31 +1026,47 @@
         <div id="instructions-modal">
             <h1>How to Play</h1>
             
-            <h2>The Motive</h2>
+            <h2>🎯 The Goal</h2>
             <ul>
-                <li>Synapse Switch is a brain-training game. Your goal is to fight your brain's instincts by managing two conflicting tasks at once.</li>
+                <li>Train your brain to handle <strong>two tasks simultaneously</strong> while adapting to constant changes.</li>
+                <li>Challenge your <strong>focus, reaction time, and cognitive flexibility</strong>.</li>
             </ul>
             
-            <h2>The Rules</h2>
+            <h2>🎮 The Rules</h2>
             <ul>
-                <li>You control two orbs: <strong class="text-blue">Blue (left)</strong> and <strong class="text-red">Red (right)</strong>.</li>
-                <li>A rule is displayed for each orb (e.g., "Blue: TRIANGLE").</li>
-                <li>You <strong>MUST</strong> hit every shape that matches your rule.</li>
-                <li>You <strong>MUST</strong> avoid every shape that does NOT match your rule.</li>
-                <li>Missing a correct shape or hitting an incorrect shape is <strong class="text-red">GAME OVER</strong>.</li>
-                <li>Every 5 points, the game speeds up!</li>
-                <li>Every 30 seconds, the rules will <strong class="text-gold">SWITCH!</strong> Pay attention!</li>
+                <li>You control two orbs: <strong class="text-blue">Blue (left side)</strong> and <strong class="text-red">Red (right side)</strong>.</li>
+                <li>Each orb has a shape to collect: either <strong>TRIANGLE ▲</strong> or <strong>SQUARE ■</strong>.</li>
+                <li>Watch the top of the screen to see which shape each orb should collect.</li>
+                <li>Move your orbs left or right to <strong>COLLECT</strong> the correct shapes.</li>
+                <li><strong>AVOID</strong> hitting the wrong shapes - that's game over!</li>
+                <li><strong>⚡ Every 30 seconds, the shapes SWITCH!</strong> Blue might switch from collecting triangles to squares, and vice versa.</li>
+                <li>Every 5 points earned, the game gets faster!</li>
             </ul>
             
-            <h2>Controls</h2>
+            <h2>🕹️ Controls</h2>
             <div class="controls-section">
-                <p><strong>Laptop:</strong> "A" key (Blue Orb) and "Right Arrow" key (Red Orb)</p>
-                <p><strong>Mobile:</strong> Tap the Left side (Blue Orb) and Right side (Red Orb)</p>
+                <p><strong>Laptop/Desktop:</strong></p>
+                <p>• Press <strong>"A"</strong> to move the Blue Orb (left/right toggle)</p>
+                <p>• Press <strong>"D"</strong> to move the Red Orb (left/right toggle)</p>
+                <p>• Press <strong>"SPACE"</strong> to enter Fullscreen mode</p>
+                <p>• Press <strong>"ESC"</strong> to exit Fullscreen mode</p>
+                <p><strong>Mobile/Tablet:</strong></p>
+                <p>• Tap the <strong>Left side</strong> of screen to move Blue Orb</p>
+                <p>• Tap the <strong>Right side</strong> of screen to move Red Orb</p>
             </div>
+            
+            <h2>🧠 Benefits of Playing</h2>
+            <ul>
+                <li><strong>Improves multitasking ability</strong> - Handle two tasks at once</li>
+                <li><strong>Enhances reaction time</strong> - Quick decision making under pressure</li>
+                <li><strong>Boosts cognitive flexibility</strong> - Adapt to rule changes instantly</li>
+                <li><strong>Strengthens focus</strong> - Maintain attention on multiple objects</li>
+                <li><strong>Trains split attention</strong> - Monitor left and right simultaneously</li>
+            </ul>
             
             <p class="creator-credit">Created by AANISH NITHIN A</p>
             
-            <button id="close-instructions" class="secondary-button">Close</button>
+            <button id="close-instructions" class="secondary-button">Got It!</button>
         </div>
 
         <div id="switch-warning">SWITCH!</div>
@@ -1050,7 +1102,8 @@
             rules: {
                 blue: 'TRIANGLE',  // Blue orb should collect TRIANGLE
                 red: 'SQUARE'      // Red orb should collect SQUARE
-            }
+            },
+            hasShownHighScoreBanner: false  // Track if banner shown this session
         };
 
         // Get orb elements
@@ -1075,9 +1128,18 @@
             const headerHeight = document.getElementById('ui-header').offsetHeight;
             const gameAreaHeight = containerHeight - headerHeight;
             
-            // Hit zone is near the bottom where orbs are (last 15% of game area)
-            hitZoneTop = headerHeight + gameAreaHeight * 0.85;
-            hitZoneBottom = headerHeight + gameAreaHeight * 0.92;
+            // On mobile, orbs are in the middle (bottom: 45vh), so adjust hit zone accordingly
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Mobile: orbs are in middle of screen, hit zone around center
+                hitZoneTop = headerHeight + gameAreaHeight * 0.35;
+                hitZoneBottom = headerHeight + gameAreaHeight * 0.55;
+            } else {
+                // Desktop: orbs at bottom 20px, normal hit zone
+                hitZoneTop = headerHeight + gameAreaHeight * 0.85;
+                hitZoneBottom = headerHeight + gameAreaHeight * 0.92;
+            }
         }
 
         // Function to update blue orb position
@@ -1094,6 +1156,21 @@
 
         // Keydown event listener
         document.addEventListener('keydown', (event) => {
+            // Handle fullscreen toggle with Space bar (works anytime)
+            if (event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault(); // Prevent page scroll
+                toggleFullscreen();
+                return;
+            }
+
+            // Handle exit fullscreen with Escape (browser handles this automatically, but we can track it)
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                if (document.fullscreenElement) {
+                    exitFullscreen();
+                }
+                return;
+            }
+
             if (!gameActive) return;
 
             // Handle 'a' key for blue orb
@@ -1103,13 +1180,42 @@
                 updateBlueOrb();
             }
 
-            // Handle 'ArrowRight' key for red orb
-            if (event.key === 'ArrowRight') {
+            // Handle 'd' key for red orb
+            if (event.key === 'd' || event.key === 'D') {
                 // Toggle between left and right
                 redLane = (redLane === 'left') ? 'right' : 'left';
                 updateRedOrb();
             }
         });
+
+        // Fullscreen functions
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+            
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { // Safari
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE11
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                exitFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { // Safari
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { // IE11
+                document.msExitFullscreen();
+            }
+        }
 
         // Touch controls for mobile
         leftPane.addEventListener('touchstart', (event) => {
@@ -1190,19 +1296,13 @@
             // Update difficulty based on score
             updateDifficulty();
             
-            // Update high score if needed
+            // Update high score silently during gameplay (no banner)
             if (gameState.score > gameState.highScore) {
                 gameState.highScore = gameState.score;
                 document.getElementById('high-score-display').textContent = gameState.highScore;
                 // Save to localStorage
                 localStorage.setItem('synapseHighScore', gameState.highScore);
-                
-                // Show motivational banner for new high score
-                const banner = document.getElementById('new-high-score-banner');
-                banner.style.display = 'block';
-                setTimeout(() => {
-                    banner.style.display = 'none';
-                }, 3000); // Show for 3 seconds
+                gameState.hasShownHighScoreBanner = true; // Mark that new high score was achieved
             }
         }
 
@@ -1234,11 +1334,8 @@
             
             // Check and update high score
             const highScoreMessage = document.getElementById('high-score-message');
-            if (gameState.score > gameState.highScore) {
-                gameState.highScore = gameState.score;
-                document.getElementById('high-score-display').textContent = gameState.highScore;
-                // Save to localStorage
-                localStorage.setItem('synapseHighScore', gameState.highScore);
+            if (gameState.hasShownHighScoreBanner) {
+                // Player beat their high score this game!
                 highScoreMessage.textContent = '🎉 NEW HIGH SCORE! 🎉';
                 highScoreMessage.style.color = '#ffd700';
                 highScoreMessage.style.fontSize = '20px';
@@ -1442,6 +1539,7 @@
             gameState.level = 1;
             gameState.spawnRate = baseSettings.spawnRate;   // Set based on difficulty
             gameState.fallSpeed = baseSettings.fallSpeed;   // Set based on difficulty
+            gameState.hasShownHighScoreBanner = false;      // Reset high score banner flag
             
             // Reset timing variables
             lastSpawnTime = 0;
