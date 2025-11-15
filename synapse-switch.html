@@ -34,13 +34,26 @@
         }
 
         #game-container {
-            width: 800px;
-            height: 600px;
+            width: 1000px;
+            height: 750px;
             background: #0f0f1e;
             border-radius: 10px;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             position: relative;
+        }
+
+        /* Fullscreen mode */
+        #game-container:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+        }
+
+        #game-container:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
         }
 
         /* Mobile responsiveness */
@@ -1190,7 +1203,7 @@
 
         // Fullscreen functions
         function toggleFullscreen() {
-            const elem = document.documentElement;
+            const elem = document.getElementById('game-container');
             
             if (!document.fullscreenElement) {
                 // Enter fullscreen
