@@ -1085,7 +1085,8 @@
             rules: {
                 blue: 'TRIANGLE',  // Blue orb should collect TRIANGLE
                 red: 'SQUARE'      // Red orb should collect SQUARE
-            }
+            },
+            hasShownHighScoreBanner: false  // Track if banner shown this session
         };
 
         // Get orb elements
@@ -1234,19 +1235,13 @@
             // Update difficulty based on score
             updateDifficulty();
             
-            // Update high score if needed
+            // Update high score silently during gameplay (no banner)
             if (gameState.score > gameState.highScore) {
                 gameState.highScore = gameState.score;
                 document.getElementById('high-score-display').textContent = gameState.highScore;
                 // Save to localStorage
                 localStorage.setItem('synapseHighScore', gameState.highScore);
-                
-                // Show motivational banner for new high score
-                const banner = document.getElementById('new-high-score-banner');
-                banner.style.display = 'block';
-                setTimeout(() => {
-                    banner.style.display = 'none';
-                }, 3000); // Show for 3 seconds
+                gameState.hasShownHighScoreBanner = true; // Mark that new high score was achieved
             }
         }
 
@@ -1278,11 +1273,8 @@
             
             // Check and update high score
             const highScoreMessage = document.getElementById('high-score-message');
-            if (gameState.score > gameState.highScore) {
-                gameState.highScore = gameState.score;
-                document.getElementById('high-score-display').textContent = gameState.highScore;
-                // Save to localStorage
-                localStorage.setItem('synapseHighScore', gameState.highScore);
+            if (gameState.hasShownHighScoreBanner) {
+                // Player beat their high score this game!
                 highScoreMessage.textContent = '🎉 NEW HIGH SCORE! 🎉';
                 highScoreMessage.style.color = '#ffd700';
                 highScoreMessage.style.fontSize = '20px';
@@ -1486,6 +1478,7 @@
             gameState.level = 1;
             gameState.spawnRate = baseSettings.spawnRate;   // Set based on difficulty
             gameState.fallSpeed = baseSettings.fallSpeed;   // Set based on difficulty
+            gameState.hasShownHighScoreBanner = false;      // Reset high score banner flag
             
             // Reset timing variables
             lastSpawnTime = 0;
