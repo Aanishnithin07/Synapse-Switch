@@ -1000,6 +1000,7 @@
             <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press 'D' to switch lanes</p>
             <p class="highlight-text">Match the shapes shown in the rules!</p>
             <p class="warning-text">⚡ Shapes switch every 30 seconds!</p>
+            <p class="instruction-text" style="font-size: 14px; margin-top: 10px;">💡 Press SPACE for fullscreen | ESC to exit</p>
             
             <div class="difficulty-selector">
                 <div class="difficulty-label">SELECT DIFFICULTY:</div>
@@ -1047,6 +1048,8 @@
                 <p><strong>Laptop/Desktop:</strong></p>
                 <p>• Press <strong>"A"</strong> to move the Blue Orb (left/right toggle)</p>
                 <p>• Press <strong>"D"</strong> to move the Red Orb (left/right toggle)</p>
+                <p>• Press <strong>"SPACE"</strong> to enter Fullscreen mode</p>
+                <p>• Press <strong>"ESC"</strong> to exit Fullscreen mode</p>
                 <p><strong>Mobile/Tablet:</strong></p>
                 <p>• Tap the <strong>Left side</strong> of screen to move Blue Orb</p>
                 <p>• Tap the <strong>Right side</strong> of screen to move Red Orb</p>
@@ -1153,6 +1156,21 @@
 
         // Keydown event listener
         document.addEventListener('keydown', (event) => {
+            // Handle fullscreen toggle with Space bar (works anytime)
+            if (event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault(); // Prevent page scroll
+                toggleFullscreen();
+                return;
+            }
+
+            // Handle exit fullscreen with Escape (browser handles this automatically, but we can track it)
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                if (document.fullscreenElement) {
+                    exitFullscreen();
+                }
+                return;
+            }
+
             if (!gameActive) return;
 
             // Handle 'a' key for blue orb
@@ -1169,6 +1187,35 @@
                 updateRedOrb();
             }
         });
+
+        // Fullscreen functions
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+            
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { // Safari
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE11
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                exitFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { // Safari
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { // IE11
+                document.msExitFullscreen();
+            }
+        }
 
         // Touch controls for mobile
         leftPane.addEventListener('touchstart', (event) => {
