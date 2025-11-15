@@ -1147,8 +1147,8 @@
                 updateBlueOrb();
             }
 
-            // Handle 'ArrowRight' key for red orb
-            if (event.key === 'ArrowRight') {
+            // Handle 'ArrowRight' or 'd' key for red orb
+            if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
                 // Toggle between left and right
                 redLane = (redLane === 'left') ? 'right' : 'left';
                 updateRedOrb();
