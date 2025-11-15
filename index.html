@@ -997,9 +997,9 @@
         <div class="overlay" id="start-overlay">
             <h2 class="game-title">SYNAPSE SWITCH</h2>
             <p class="instruction-text"><span class="blue-text">🔵 Blue Orb:</span> Press 'A' to switch lanes</p>
-            <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press '→' (Arrow Right) to switch lanes</p>
+            <p class="instruction-text"><span class="red-text">🔴 Red Orb:</span> Press 'D' to switch lanes</p>
             <p class="highlight-text">Match the shapes shown in the rules!</p>
-            <p class="warning-text">⚡ Rules switch every 30 seconds!</p>
+            <p class="warning-text">⚡ Shapes switch every 30 seconds!</p>
             
             <div class="difficulty-selector">
                 <div class="difficulty-label">SELECT DIFFICULTY:</div>
@@ -1046,7 +1046,7 @@
             <div class="controls-section">
                 <p><strong>Laptop/Desktop:</strong></p>
                 <p>• Press <strong>"A"</strong> to move the Blue Orb (left/right toggle)</p>
-                <p>• Press <strong>"D"</strong> or <strong>"Right Arrow"</strong> to move the Red Orb (left/right toggle)</p>
+                <p>• Press <strong>"D"</strong> to move the Red Orb (left/right toggle)</p>
                 <p><strong>Mobile/Tablet:</strong></p>
                 <p>• Tap the <strong>Left side</strong> of screen to move Blue Orb</p>
                 <p>• Tap the <strong>Right side</strong> of screen to move Red Orb</p>
@@ -1162,8 +1162,8 @@
                 updateBlueOrb();
             }
 
-            // Handle 'ArrowRight' or 'd' key for red orb
-            if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
+            // Handle 'd' key for red orb
+            if (event.key === 'd' || event.key === 'D') {
                 // Toggle between left and right
                 redLane = (redLane === 'left') ? 'right' : 'left';
                 updateRedOrb();
