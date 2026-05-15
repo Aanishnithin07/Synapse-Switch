@@ -3,7 +3,7 @@
   "name": "synapse-switch",
   "builds": [
     {
-      "src": "synapse-switch.html",
+      "src": "synapse-switch.html", 
       "use": "@vercel/static"
     }
   ],
